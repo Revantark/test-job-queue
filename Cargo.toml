@@ -1,0 +1,60 @@
+# Workspace root. Shared dependency versions live here so every crate stays in
+# lockstep; each crate opts in with `workspace = true`.
+[workspace]
+resolver = "3"
+members = ["crates/*"]
+
+[workspace.package]
+edition = "2024"
+version = "0.1.0"
+license = "MIT"
+# Highest minimum required by the resolved dependency set (sqlx 0.9 needs 1.94).
+rust-version = "1.94"
+
+[workspace.dependencies]
+job-core = { path = "crates/job-core" }
+job-store = { path = "crates/job-store" }
+job-store-postgres = { path = "crates/job-store-postgres" }
+job-worker = { path = "crates/job-worker" }
+job-handlers = { path = "crates/job-handlers" }
+
+tokio = { version = "1.54", features = ["rt-multi-thread", "macros", "time", "sync", "signal"] }
+tokio-util = "0.7"
+futures = "0.3"
+async-trait = "0.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1.29", features = ["v4", "serde"] }
+thiserror = "2.0"
+anyhow = "1.0"
+rand = "0.10"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+clap = { version = "4.6", features = ["derive"] }
+sqlx = { version = "0.9", default-features = false, features = [
+    "runtime-tokio",
+    "postgres",
+    "chrono",
+    "uuid",
+    "json",
+    "migrate",
+    "macros",
+] }
+criterion = { version = "0.8", features = ["async_tokio"] }
+
+[profile.release]
+lto = "thin"
+
+# Shared lint policy, inherited by every member via `[lints] workspace = true`.
+[workspace.lints.rust]
+missing_docs = "warn"
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+module_name_repetitions = "allow"
+must_use_candidate = "allow"
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"

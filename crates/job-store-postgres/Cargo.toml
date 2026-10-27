@@ -1,0 +1,34 @@
+[package]
+name = "job-store-postgres"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+job-core.workspace = true
+job-store.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+serde_json.workspace = true
+async-trait.workspace = true
+sqlx.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+tokio.workspace = true
+tokio-util.workspace = true
+rand.workspace = true
+job-worker.workspace = true
+job-handlers.workspace = true
+job-store.workspace = true
+async-trait.workspace = true
+
+[[bench]]
+name = "claim"
+harness = false
+
+[dev-dependencies.criterion]
+workspace = true
+
+[lints]
+workspace = true
